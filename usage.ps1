@@ -1,17 +1,44 @@
 # install Powershell 7
 winget install --id Microsoft.Powershell --source winget
+# install windows terminal app
+winget install -e --id Microsoft.WindowsTerminal
 
+# open windows terminal and select PS7
+# in PS7
 Install-Module DCToolbox
 Confirm-DCPowerShellVersion
 
-
+# Install the MS Graph PowerShell Module
 Install-DCMicrosoftGraphPowerShellModule
 Connect-DCMsGraphAsUser -Scopes 'Policy.ReadWrite.ConditionalAccess', 'Policy.Read.All', 'Directory.Read.All'
 
+# list all ConAcc Policies
+Get-DCConditionalAccessPolicies
+
+Get-DCNamedLocations
+
+# output a json to the users folder
+Export-DCConditionalAccessPolicyDesign
+
+
+New-DCConditionalAccessAssignmentReport
+New-DCConditionalAccessPolicyDesignReport
+
+
+################# CAREFULL ######## Interesting for deployment
+Set-DCConditionalAccessPoliciesPilotMode -PrefixFilter 'GLOBAL - ' -PilotGroupName 'Conditional Access Pilot' -EnablePilot
+    
+Set-DCConditionalAccessPoliciesPilotMode -PrefixFilter 'GLOBAL - ' -PilotGroupName 'Conditional Access Pilot' -EnableProduction
+Set-DCConditionalAccessPoliciesReportOnlyMode -PrefixFilter 'GLOBAL - ' -SetToEnabled
+
+
+
+
+
+#################################### Dont Use yet!
 Add-DCConditionalAccessPoliciesBreakGlassGroup
 
-Copy-DCExample
-Export-DCConditionalAccessPolicyDesign
+
     
 $Parameters = @{
     FilePath = 'C:\Temp\Conditional Access.json'
@@ -19,8 +46,7 @@ $Parameters = @{
 
 Get-DCConditionalAccessPolicies
 
-Get-DCNamedLocations
-Get-DCPublicIp
+
 Import-DCConditionalAccessPolicyDesign @Parameters    
 $Parameters = @{
     FilePath = 'C:\Temp\Conditional Access.json'
@@ -44,9 +70,4 @@ $Parameters = @{
     SummarizedOutput = $true
     VerbosePolicyEvaluation = $false
     IncludeNonMatchingPolicies = $false
-New-DCConditionalAccessAssignmentReport
-New-DCConditionalAccessPolicyDesignReport
-Set-DCConditionalAccessPoliciesPilotMode -PrefixFilter 'GLOBAL - ' -PilotGroupName 'Conditional Access Pilot' -EnablePilot
-    
-Set-DCConditionalAccessPoliciesPilotMode -PrefixFilter 'GLOBAL - ' -PilotGroupName 'Conditional Access Pilot' -EnableProduction
-Set-DCConditionalAccessPoliciesReportOnlyMode -PrefixFilter 'GLOBAL - ' -SetToEnabled
+
