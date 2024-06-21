@@ -20,7 +20,7 @@ Get-DCNamedLocations
 # output a json to the users folder
 Export-DCConditionalAccessPolicyDesign
 
-
+# outputs an excel file to the users folders of policies etc
 New-DCConditionalAccessAssignmentReport
 New-DCConditionalAccessPolicyDesignReport
 
